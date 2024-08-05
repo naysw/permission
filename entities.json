@@ -1,0 +1,26 @@
+[
+  {
+    "uid": {
+      "id": "1",
+      "type": "User"
+    },
+    "attrs": {
+      "id": "1"
+    },
+    "parents": [
+      {
+        "type": "Role",
+        "id": "Viewer"
+      }
+    ]
+  },
+  {
+    "uid": {
+      "type": "Document",
+      "id": "cedar_tutorial.pdf"
+    },
+    "attrs": {
+      "owner_id": "1"
+    }
+  }
+]
