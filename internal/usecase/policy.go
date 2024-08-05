@@ -155,6 +155,12 @@ type AttachPolicyInput struct {
 	PolicyIDs     []string
 }
 
+type DetachPolicyInput struct {
+	PrincipalID   string
+	PrincipalType string
+	PolicyIDs     []string
+}
+
 func (u PolicyUsecase) AttachPolicy(
 	ctx context.Context,
 	input AttachPolicyInput) error {
@@ -162,6 +168,20 @@ func (u PolicyUsecase) AttachPolicy(
 	return u.policyRepo.Attach(
 		ctx,
 		domain.AttachPolicyInput{
+			PrincipalID:   input.PrincipalID,
+			PrincipalType: input.PrincipalType,
+			PolicyIDs:     input.PolicyIDs,
+		},
+	)
+}
+
+func (u PolicyUsecase) DetachPolicy(
+	ctx context.Context,
+	input DetachPolicyInput) error {
+
+	return u.policyRepo.Detach(
+		ctx,
+		domain.DetachPolicyInput{
 			PrincipalID:   input.PrincipalID,
 			PrincipalType: input.PrincipalType,
 			PolicyIDs:     input.PolicyIDs,

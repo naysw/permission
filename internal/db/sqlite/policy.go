@@ -124,17 +124,16 @@ func (r PolicyRepo) Attach(ctx context.Context, input domain.AttachPolicyInput) 
 }
 
 func (r PolicyRepo) Detach(ctx context.Context, input domain.DetachPolicyInput) error {
-	var phps []PrincipalHasPolicy
-
-	for _, pid := range input.PolicyIDs {
-		phps = append(phps, PrincipalHasPolicy{
-			PrincipalID:   input.PrincipalID,
-			PrincipalType: input.PrincipalType,
-			PolicyID:      pid,
-		})
-	}
-
-	return r.db.WithContext(ctx).Delete(&phps).Error
+	return r.db.WithContext(ctx).
+		Where(`
+      principal_id = ? AND 
+      principal_type = ? AND policy_id IN ?
+      `,
+			input.PrincipalID,
+			input.PrincipalType,
+			input.PolicyIDs,
+		).
+		Delete(&PrincipalHasPolicy{}).Error
 }
 
 func NewPolicyRepo(db *gorm.DB) domain.PolicyRepo {

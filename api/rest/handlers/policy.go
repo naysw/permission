@@ -91,3 +91,29 @@ func (h PolicyHandler) Attach(w http.ResponseWriter, r *http.Request) {
 
 	res.NewOK(w)
 }
+
+func (h PolicyHandler) Detach(w http.ResponseWriter, r *http.Request) {
+	var req dto.DetachPolicy
+
+	if err := parseBody(r, &req); err != nil {
+		res.NewBadRequest(w, res.WithMessage(err.Error()))
+		return
+	}
+	if fes := req.Validate(); len(fes) > 0 {
+		res.NewUnprocessableEntity(w, res.WithErrors(fes))
+		return
+	}
+
+	if err := h.policyUsecase.DetachPolicy(
+		r.Context(),
+		usecase.DetachPolicyInput{
+			PrincipalID:   req.PrincipalID,
+			PrincipalType: req.PrincipalType,
+			PolicyIDs:     req.PolicyIDs,
+		}); err != nil {
+		res.NewHttpErr(w, err)
+		return
+	}
+
+	res.NewOK(w)
+}

@@ -26,6 +26,7 @@ func registerRoutes(mux *http.ServeMux, app *core.App) {
 	mux.HandleFunc("PUT /policies/:id", policyHandler.Update)
 	mux.HandleFunc("DELETE /policies/:id", policyHandler.Delete)
 	mux.HandleFunc("POST /policies/attach", policyHandler.Attach)
+	mux.HandleFunc("POST /policies/detach", policyHandler.Detach)
 
 	mux.HandleFunc("POST /is_authorized", authzHandler.IsAuthorized)
 }
